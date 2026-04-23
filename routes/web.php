@@ -5,3 +5,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login', fn () => abort(501))->name('login');
+Route::get('/register', fn () => abort(501))->name('register');
+Route::get('/forgot-password', fn () => abort(501))->name('password.request');
+Route::get('/reset-password/{token}', fn () => abort(501))->name('password.reset');
+
+Route::get('/verify-email', fn () => abort(501))->name('verification.notice');
+Route::get('/verify-email/{id}/{hash}', fn () => abort(501))->name('verification.verify');
+Route::post('/logout', fn () => abort(501))->name('logout');
+
+Route::view('/dashboard', 'dashboard')->name('dashboard');
