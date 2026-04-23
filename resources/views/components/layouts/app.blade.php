@@ -11,6 +11,7 @@
 <body class="min-h-full bg-neutral-50 text-neutral-900 antialiased">
     {{ $slot }}
 
+    @livewire('notifications')
     @filamentScripts
 </body>
 </html>

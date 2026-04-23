@@ -1,26 +1,33 @@
 <div>
-    <div class="mb-6 space-y-2">
-        <h1 class="text-xl font-semibold tracking-tight">Verify your email</h1>
-        <p class="text-sm text-neutral-600">
+    <div class="mb-8 space-y-2">
+        <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Verify your email</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
             Before continuing, please click the verification link we just emailed to
-            <span class="font-medium text-neutral-900">{{ auth()->user()->email }}</span>.
+            <span class="font-medium text-gray-900 dark:text-white">{{ auth()->user()->email }}</span>.
             If you didn't get it, we can send another.
         </p>
     </div>
 
-    <div class="space-y-3">
-        <button wire:click="resend"
-            class="inline-flex w-full items-center justify-center rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2"
+    <div class="space-y-4">
+        <x-filament::button
+            wire:click="resend"
+            color="primary"
+            size="lg"
+            class="w-full"
             wire:loading.attr="disabled"
             wire:target="resend">
             <span wire:loading.remove wire:target="resend">Resend verification email</span>
             <span wire:loading wire:target="resend">Sending…</span>
-        </button>
+        </x-filament::button>
 
-        <button wire:click="logout"
-            class="inline-flex w-full items-center justify-center rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 ring-1 ring-neutral-300 hover:bg-neutral-50">
+        <x-filament::button
+            wire:click="logout"
+            color="gray"
+            outlined
+            size="lg"
+            class="w-full">
             Log out
-        </button>
+        </x-filament::button>
     </div>
 
     <x-filament-actions::modals />
