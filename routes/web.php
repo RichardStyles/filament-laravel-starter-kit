@@ -16,4 +16,6 @@ Route::get('/verify-email', fn () => abort(501))->name('verification.notice');
 Route::get('/verify-email/{id}/{hash}', fn () => abort(501))->name('verification.verify');
 Route::post('/logout', LogoutController::class)->name('logout');
 
-Route::view('/dashboard', 'dashboard')->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+});
