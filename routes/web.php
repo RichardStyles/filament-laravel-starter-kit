@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
+use App\Livewire\Auth\VerifyEmail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,9 +21,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/verify-email', fn () => abort(501))->name('verification.notice');
-    Route::get('/verify-email/{id}/{hash}', fn () => abort(501))->name('verification.verify');
+    Route::get('/verify-email', VerifyEmail::class)->name('verification.notice');
+    Route::get('/verify-email/{id}/{hash}', EmailVerificationController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
     Route::post('/logout', LogoutController::class)->name('logout');
+});
 
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 });
