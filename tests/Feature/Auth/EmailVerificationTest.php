@@ -46,6 +46,35 @@ it('returns 403 for a tampered hash', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
+it('returns 403 when one user hits another users verify URL (IDOR)', function () {
+    $alice = User::factory()->unverified()->create(['email' => 'alice@example.com']);
+    $bob = User::factory()->unverified()->create(['email' => 'bob@example.com']);
+
+    $bobsSignedUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addHour(),
+        ['id' => $bob->id, 'hash' => sha1($bob->email)],
+    );
+
+    $this->actingAs($alice)->get($bobsSignedUrl)->assertForbidden();
+
+    expect($bob->fresh()->hasVerifiedEmail())->toBeFalse();
+    expect($alice->fresh()->hasVerifiedEmail())->toBeFalse();
+});
+
+it('redirects guests to login for a valid signed verification URL', function () {
+    $user = User::factory()->unverified()->create();
+
+    $signedUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addHour(),
+        ['id' => $user->id, 'hash' => sha1($user->email)],
+    );
+
+    $this->get($signedUrl)->assertRedirect(route('login'));
+    expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+});
+
 it('resends the verification notification when requested', function () {
     Notification::fake();
 
