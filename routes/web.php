@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,6 +14,6 @@ Route::get('/reset-password/{token}', fn () => abort(501))->name('password.reset
 
 Route::get('/verify-email', fn () => abort(501))->name('verification.notice');
 Route::get('/verify-email/{id}/{hash}', fn () => abort(501))->name('verification.verify');
-Route::post('/logout', fn () => abort(501))->name('logout');
+Route::post('/logout', LogoutController::class)->name('logout');
 
 Route::view('/dashboard', 'dashboard')->name('dashboard');
