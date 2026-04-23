@@ -16,3 +16,18 @@ it('redirects authenticated users away from guest routes', function (string $pat
     '/forgot-password',
     '/reset-password/some-token',
 ]);
+
+it('renders guest-facing auth pages without blowing up', function (string $path) {
+    $this->get($path)->assertOk();
+})->with([
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password/some-token',
+]);
+
+it('renders /verify-email for authenticated unverified users', function () {
+    $user = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->get(route('verification.notice'))->assertOk();
+});

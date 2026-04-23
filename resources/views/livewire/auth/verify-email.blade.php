@@ -22,4 +22,6 @@
             Log out
         </button>
     </div>
+
+    <x-filament-actions::modals />
 </div>

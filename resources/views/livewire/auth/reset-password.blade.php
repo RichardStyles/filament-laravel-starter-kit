@@ -17,4 +17,6 @@
             <span wire:loading wire:target="resetPassword">Resetting…</span>
         </button>
     </form>
+
+    <x-filament-actions::modals />
 </div>

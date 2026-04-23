@@ -23,4 +23,6 @@
             <span wire:loading wire:target="login">Signing in…</span>
         </button>
     </form>
+
+    <x-filament-actions::modals />
 </div>

@@ -17,4 +17,6 @@
             <span wire:loading wire:target="register">Creating…</span>
         </button>
     </form>
+
+    <x-filament-actions::modals />
 </div>

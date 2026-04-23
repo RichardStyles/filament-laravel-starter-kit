@@ -11,7 +11,6 @@
 <body class="min-h-full bg-neutral-50 text-neutral-900 antialiased">
     {{ $slot }}
 
-    <x-filament-actions::modals />
     @filamentScripts
 </body>
 </html>

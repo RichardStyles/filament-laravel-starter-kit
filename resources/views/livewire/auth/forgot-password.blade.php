@@ -21,4 +21,6 @@
             <a href="{{ route('login') }}" class="text-neutral-900 underline-offset-4 hover:underline">Back to sign in</a>
         </p>
     </form>
+
+    <x-filament-actions::modals />
 </div>
