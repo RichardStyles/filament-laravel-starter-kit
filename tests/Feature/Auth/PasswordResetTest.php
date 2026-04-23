@@ -35,15 +35,25 @@ it('does not dispatch a reset-password notification for unknown emails', functio
     Notification::assertNothingSent();
 });
 
-it('resets the password with a valid token and fires PasswordReset', function () {
-    Event::fake([PasswordReset::class]);
+it('throttles repeat reset-link requests via the password broker', function () {
+    $user = User::factory()->create(['email' => 'ada@example.com']);
 
+    $component = Livewire::test(ForgotPassword::class)
+        ->set('data.email', $user->email);
+
+    $component->call('sendResetLink')->assertHasNoErrors();
+    $component->call('sendResetLink')->assertHasErrors(['data.email']);
+});
+
+it('resets the password with a valid token and fires PasswordReset', function () {
     $user = User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('old-password'),
     ]);
 
     $token = Password::createToken($user);
+
+    Event::fake([PasswordReset::class]);
 
     Livewire::test(ResetPasswordComponent::class, ['token' => $token])
         ->set('data.email', $user->email)

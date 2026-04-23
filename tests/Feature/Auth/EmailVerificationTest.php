@@ -17,9 +17,9 @@ it('redirects unverified users from /dashboard to /verify-email', function () {
 });
 
 it('marks the user verified when hitting the signed URL and fires Verified', function () {
-    Event::fake([Verified::class]);
-
     $user = User::factory()->unverified()->create();
+
+    Event::fake([Verified::class]);
 
     $signedUrl = URL::temporarySignedRoute(
         'verification.verify',
@@ -56,4 +56,19 @@ it('resends the verification notification when requested', function () {
         ->call('resend');
 
     Notification::assertSentTo($user, Illuminate\Auth\Notifications\VerifyEmail::class);
+});
+
+it('throttles verification-notification resends to 6 per minute', function () {
+    Notification::fake();
+
+    $user = User::factory()->unverified()->create();
+
+    $component = Livewire::actingAs($user)->test(VerifyEmail::class);
+
+    foreach (range(1, 6) as $ignored) {
+        $component->call('resend');
+    }
+
+    $component->call('resend');
+    Notification::assertSentToTimes($user, Illuminate\Auth\Notifications\VerifyEmail::class, 6);
 });

@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -23,7 +24,21 @@ class VerifyEmail extends Component
 
     public function resend(): void
     {
-        Auth::user()->sendEmailVerificationNotification();
+        $user = Auth::user();
+        $throttleKey = 'verify-email-resend|'.$user->getKey();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 6)) {
+            Notification::make()
+                ->title(__('Please wait before requesting another verification email.'))
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        RateLimiter::hit($throttleKey, 60);
+
+        $user->sendEmailVerificationNotification();
 
         Notification::make()
             ->title(__('A new verification link has been sent to your email.'))
