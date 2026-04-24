@@ -6,19 +6,21 @@
         </p>
     </div>
 
-    <form wire:submit="register" class="space-y-6">
+    <form wire:submit="register">
         {{ $this->form }}
 
-        <x-filament::button
-            type="submit"
-            color="primary"
-            size="lg"
-            class="w-full"
-            wire:loading.attr="disabled"
-            wire:target="register">
-            <span wire:loading.remove wire:target="register">Create account</span>
-            <span wire:loading wire:target="register">Creating…</span>
-        </x-filament::button>
+        <div class="mt-6">
+            <x-filament::button
+                type="submit"
+                color="primary"
+                size="lg"
+                class="w-full"
+                wire:loading.attr="disabled"
+                wire:target="register">
+                <span wire:loading.remove wire:target="register">Create account</span>
+                <span wire:loading wire:target="register">Creating…</span>
+            </x-filament::button>
+        </div>
     </form>
 
     <x-filament-actions::modals />

@@ -30,6 +30,8 @@ class ForgotPassword extends Component implements HasSchemas
     public function form(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
+            ->extraAttributes(['class' => 'gap-6'])
             ->components([
                 TextInput::make('email')
                     ->label('Email address')

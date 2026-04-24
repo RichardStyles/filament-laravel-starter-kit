@@ -8,7 +8,7 @@
         </p>
     </div>
 
-    <div class="space-y-4">
+    <div class="mt-6 space-y-4">
         <x-filament::button
             wire:click="resend"
             color="primary"
