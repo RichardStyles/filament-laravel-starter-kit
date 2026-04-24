@@ -8,6 +8,7 @@
         @livewire(\App\Livewire\Profile\UpdateProfileInformation::class)
         @livewire(\App\Livewire\Profile\UpdatePassword::class)
         @livewire(\App\Livewire\Profile\TwoFactorAuthentication::class)
+        @livewire(\App\Livewire\Profile\Appearance::class)
         @livewire(\App\Livewire\Profile\BrowserSessions::class)
         @livewire(\App\Livewire\Profile\DeleteAccount::class)
     </div>

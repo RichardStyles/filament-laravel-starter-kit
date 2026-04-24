@@ -41,7 +41,6 @@ class UpdateProfileInformation extends Component implements HasSchemas
                     ->label('Avatar')
                     ->avatar()
                     ->image()
-                    ->imageEditor()
                     ->disk('public')
                     ->directory('avatars')
                     ->visibility('public')

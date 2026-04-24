@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('renders the profile page with all five sections for a verified user', function (): void {
+it('renders the profile page with all six sections for a verified user', function (): void {
     $this->actingAs(User::factory()->create());
 
     $page = visit('/profile');
@@ -11,6 +11,7 @@ it('renders the profile page with all five sections for a verified user', functi
         ->assertSee('Personal information')
         ->assertSee('Update password')
         ->assertSee('Two-factor authentication')
+        ->assertSee('Appearance')
         ->assertSee('Browser sessions')
         ->assertSee('Delete account')
         ->assertNoJavaScriptErrors();
