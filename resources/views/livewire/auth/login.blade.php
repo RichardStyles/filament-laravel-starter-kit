@@ -6,6 +6,8 @@
         </p>
     </div>
 
+    <x-socialite-buttons />
+
     <form wire:submit="login">
         {{ $this->form }}
 

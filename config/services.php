@@ -37,4 +37,25 @@ return [
         ],
     ],
 
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => env('GITHUB_REDIRECT_URI', '/auth/github/callback'),
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
+    ],
+
+    'socialite' => [
+        /*
+         * The list of OAuth providers enabled in the kit. Add to this list to
+         * surface a "Sign in with X" button on /login and /register, then drop
+         * the corresponding credentials in services.X above and the env file.
+         */
+        'providers' => array_filter(explode(',', (string) env('SOCIALITE_PROVIDERS', 'github,google'))),
+    ],
+
 ];

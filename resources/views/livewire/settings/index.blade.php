@@ -10,6 +10,7 @@
         @livewire(\App\Livewire\Profile\TwoFactorAuthentication::class)
         @livewire(\App\Livewire\Profile\Appearance::class)
         @livewire(\App\Livewire\Profile\ApiTokens::class)
+        @livewire(\App\Livewire\Profile\ConnectedAccounts::class)
         @livewire(\App\Livewire\Profile\BrowserSessions::class)
         @livewire(\App\Livewire\Profile\DeleteAccount::class)
     </div>

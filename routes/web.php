@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
@@ -21,6 +22,9 @@ Route::middleware('guest')->group(function (): void {
     Route::get('/register', Register::class)->name('register');
     Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
     Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
+
+    Route::get('/auth/{provider}/redirect', [SocialController::class, 'redirect'])->name('socialite.redirect');
+    Route::get('/auth/{provider}/callback', [SocialController::class, 'callback'])->name('socialite.callback');
 });
 
 Route::middleware('auth')->group(function (): void {

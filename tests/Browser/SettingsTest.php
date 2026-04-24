@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-it('renders the settings page with all seven sections for a verified user', function (): void {
+it('renders the settings page with all eight sections for a verified user', function (): void {
     $this->actingAs(User::factory()->create());
 
     $page = visit('/settings');
@@ -15,6 +15,7 @@ it('renders the settings page with all seven sections for a verified user', func
         ->assertSee('Two-factor authentication')
         ->assertSee('Appearance')
         ->assertSee('API tokens')
+        ->assertSee('Connected accounts')
         ->assertSee('Browser sessions')
         ->assertSee('Delete account')
         ->assertNoJavaScriptErrors();
