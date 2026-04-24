@@ -5,7 +5,7 @@ use App\Models\User;
 use Filament\Notifications\Notification;
 use Livewire\Livewire;
 
-it('renders the authenticated user name and email in the mobile disclosure', function () {
+it('renders the authenticated user name and email in the mobile disclosure', function (): void {
     $user = User::factory()->create([
         'name' => 'Ada Lovelace',
         'email' => 'ada@example.com',
@@ -18,7 +18,7 @@ it('renders the authenticated user name and email in the mobile disclosure', fun
         ->assertSee('ada@example.com');
 });
 
-it('marks the Dashboard link as the current page when on /dashboard', function () {
+it('marks the Dashboard link as the current page when on /dashboard', function (): void {
     $user = User::factory()->create(['email_verified_at' => now()]);
 
     $this->actingAs($user)
@@ -28,7 +28,7 @@ it('marks the Dashboard link as the current page when on /dashboard', function (
         ->assertSee('Dashboard');
 });
 
-it('signs the user out and redirects to /', function () {
+it('signs the user out and redirects to /', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -40,7 +40,7 @@ it('signs the user out and redirects to /', function () {
     expect(auth()->check())->toBeFalse();
 });
 
-it('regenerates the session token when signing out', function () {
+it('regenerates the session token when signing out', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -52,7 +52,7 @@ it('regenerates the session token when signing out', function () {
     expect(session()->token())->not->toBe($before);
 });
 
-it('renders a Gravatar avatar URL derived from the user email', function () {
+it('renders a Gravatar avatar URL derived from the user email', function (): void {
     $user = User::factory()->create(['email' => 'Ada@Example.com']);
 
     $this->actingAs($user);
@@ -63,7 +63,7 @@ it('renders a Gravatar avatar URL derived from the user email', function () {
         ->assertSee("gravatar.com/avatar/{$expectedHash}");
 });
 
-it('wires the notifications bell to the Filament database notifications component', function () {
+it('wires the notifications bell to the Filament database notifications component', function (): void {
     $user = User::factory()->create(['email_verified_at' => now()]);
 
     $this->actingAs($user)
@@ -73,7 +73,7 @@ it('wires the notifications bell to the Filament database notifications componen
         ->assertSeeLivewire('database-notifications');
 });
 
-it('exposes the authenticated user unread notification count to the navigation view', function () {
+it('exposes the authenticated user unread notification count to the navigation view', function (): void {
     $user = User::factory()->create();
 
     Notification::make()
@@ -86,7 +86,7 @@ it('exposes the authenticated user unread notification count to the navigation v
         ->assertViewHas('unreadNotificationsCount', 1);
 });
 
-it('reports zero unread notifications when the user has none', function () {
+it('reports zero unread notifications when the user has none', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);

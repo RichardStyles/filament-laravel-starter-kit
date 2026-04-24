@@ -6,11 +6,11 @@ use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
-it('requires authentication to render', function () {
+it('requires authentication to render', function (): void {
     $this->get(route('profile'))->assertRedirect(route('login'));
 });
 
-it('prefills the form with the current user name and email', function () {
+it('prefills the form with the current user name and email', function (): void {
     $user = User::factory()->create([
         'name' => 'Ada Lovelace',
         'email' => 'ada@example.com',
@@ -22,7 +22,7 @@ it('prefills the form with the current user name and email', function () {
         ->assertSet('data.email', 'ada@example.com');
 });
 
-it('updates the user name', function () {
+it('updates the user name', function (): void {
     $user = User::factory()->create(['name' => 'Old Name']);
 
     Livewire::actingAs($user)
@@ -34,7 +34,7 @@ it('updates the user name', function () {
     expect($user->fresh()->name)->toBe('New Name');
 });
 
-it('clears email_verified_at and sends a verification notification when email changes', function () {
+it('clears email_verified_at and sends a verification notification when email changes', function (): void {
     Notification::fake();
 
     $user = User::factory()->create([
@@ -55,7 +55,7 @@ it('clears email_verified_at and sends a verification notification when email ch
     Notification::assertSentTo($fresh, VerifyEmail::class);
 });
 
-it('validates name and email', function (array $data, array $errors) {
+it('validates name and email', function (array $data, array $errors): void {
     $user = User::factory()->create();
 
     Livewire::actingAs($user)
@@ -69,7 +69,7 @@ it('validates name and email', function (array $data, array $errors) {
     'email must be an email' => [['data.email' => 'not-an-email'], ['data.email' => 'email']],
 ]);
 
-it('rejects an email already in use by another user', function () {
+it('rejects an email already in use by another user', function (): void {
     User::factory()->create(['email' => 'taken@example.com']);
     $user = User::factory()->create();
 
@@ -80,7 +80,7 @@ it('rejects an email already in use by another user', function () {
         ->assertHasErrors(['data.email']);
 });
 
-it('resends the verification notification when requested', function () {
+it('resends the verification notification when requested', function (): void {
     Notification::fake();
 
     $user = User::factory()->unverified()->create();

@@ -26,7 +26,8 @@
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.6",
         "pestphp/pest-plugin-browser": "^4.3",
-        "pestphp/pest-plugin-laravel": "^4.1"
+        "pestphp/pest-plugin-laravel": "^4.1",
+        "rector/rector": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -60,6 +61,8 @@
         "lint": "pint",
         "lint:test": "pint --test",
         "analyse": "phpstan analyse --memory-limit=2G",
+        "refactor": "rector process",
+        "refactor:dry": "rector process --dry-run",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",

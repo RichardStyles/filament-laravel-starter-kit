@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('logs the user out and redirects to /', function () {
+it('logs the user out and redirects to /', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -12,7 +12,7 @@ it('logs the user out and redirects to /', function () {
     expect(auth()->check())->toBeFalse();
 });
 
-it('regenerates the session token on logout', function () {
+it('regenerates the session token on logout', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);

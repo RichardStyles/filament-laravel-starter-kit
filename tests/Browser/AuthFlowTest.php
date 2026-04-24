@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-it('registers a new user and lands on the verify-email page', function () {
+it('registers a new user and lands on the verify-email page', function (): void {
     $page = visit('/register');
 
     $page->assertSee('Create your account')
@@ -20,7 +20,7 @@ it('registers a new user and lands on the verify-email page', function () {
     $this->assertAuthenticated();
 });
 
-it('logs a verified user in and lands on /dashboard', function () {
+it('logs a verified user in and lands on /dashboard', function (): void {
     User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('correct-horse-battery-staple'),
@@ -39,7 +39,7 @@ it('logs a verified user in and lands on /dashboard', function () {
     $this->assertAuthenticated();
 });
 
-it('rejects login with bad credentials and surfaces a Filament form error', function () {
+it('rejects login with bad credentials and surfaces a Filament form error', function (): void {
     User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('correct-horse-battery-staple'),
@@ -57,7 +57,7 @@ it('rejects login with bad credentials and surfaces a Filament form error', func
     $this->assertGuest();
 });
 
-it('logs the user out from the dashboard via the profile dropdown', function () {
+it('logs the user out from the dashboard via the profile dropdown', function (): void {
     $this->actingAs(User::factory()->create());
 
     $page = visit('/dashboard');
@@ -71,7 +71,7 @@ it('logs the user out from the dashboard via the profile dropdown', function () 
     $this->assertGuest();
 });
 
-it('sends a password reset link and shows the success toast', function () {
+it('sends a password reset link and shows the success toast', function (): void {
     User::factory()->create(['email' => 'ada@example.com']);
 
     $page = visit('/forgot-password');
@@ -83,7 +83,7 @@ it('sends a password reset link and shows the success toast', function () {
         ->assertNoJavaScriptErrors();
 });
 
-it('redirects guests from /dashboard to /login', function () {
+it('redirects guests from /dashboard to /login', function (): void {
     $page = visit('/dashboard');
 
     $page->assertPathIs('/login')

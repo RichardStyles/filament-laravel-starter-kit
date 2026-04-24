@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 
-it('logs in with valid credentials and redirects to /dashboard', function () {
+it('logs in with valid credentials and redirects to /dashboard', function (): void {
     $user = User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('correct-horse-battery-staple'),
@@ -23,7 +23,7 @@ it('logs in with valid credentials and redirects to /dashboard', function () {
     expect(auth()->id())->toBe($user->id);
 });
 
-it('fails with the wrong password', function () {
+it('fails with the wrong password', function (): void {
     User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('correct-horse-battery-staple'),
@@ -38,7 +38,7 @@ it('fails with the wrong password', function () {
     expect(auth()->check())->toBeFalse();
 });
 
-it('throttles after 5 failed attempts', function () {
+it('throttles after 5 failed attempts', function (): void {
     $user = User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('correct-horse-battery-staple'),
@@ -58,7 +58,7 @@ it('throttles after 5 failed attempts', function () {
     expect(RateLimiter::tooManyAttempts($throttleKey, 5))->toBeTrue();
 });
 
-it('regenerates the session token on successful login', function () {
+it('regenerates the session token on successful login', function (): void {
     $user = User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('correct-horse-battery-staple'),

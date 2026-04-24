@@ -5,7 +5,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 
-it('updates the user password with valid input', function () {
+it('updates the user password with valid input', function (): void {
     $user = User::factory()->create([
         'password' => Hash::make('old-password'),
     ]);
@@ -21,7 +21,7 @@ it('updates the user password with valid input', function () {
     expect(Hash::check('brand-new-password', $user->fresh()->password))->toBeTrue();
 });
 
-it('fails with the wrong current password', function () {
+it('fails with the wrong current password', function (): void {
     $user = User::factory()->create([
         'password' => Hash::make('old-password'),
     ]);
@@ -37,7 +37,7 @@ it('fails with the wrong current password', function () {
     expect(Hash::check('old-password', $user->fresh()->password))->toBeTrue();
 });
 
-it('fails when the new password does not match its confirmation', function () {
+it('fails when the new password does not match its confirmation', function (): void {
     $user = User::factory()->create([
         'password' => Hash::make('old-password'),
     ]);
@@ -51,7 +51,7 @@ it('fails when the new password does not match its confirmation', function () {
         ->assertHasErrors(['data.password']);
 });
 
-it('validates the form fields', function (array $data, array $errors) {
+it('validates the form fields', function (array $data, array $errors): void {
     $user = User::factory()->create([
         'password' => Hash::make('old-password'),
     ]);

@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('renders the profile page with all five sections for a verified user', function () {
+it('renders the profile page with all five sections for a verified user', function (): void {
     $this->actingAs(User::factory()->create());
 
     $page = visit('/profile');
@@ -16,7 +16,7 @@ it('renders the profile page with all five sections for a verified user', functi
         ->assertNoJavaScriptErrors();
 });
 
-it('updates the signed-in user name via the personal information card', function () {
+it('updates the signed-in user name via the personal information card', function (): void {
     $user = User::factory()->create(['name' => 'Original Name']);
     $this->actingAs($user);
 
@@ -30,7 +30,7 @@ it('updates the signed-in user name via the personal information card', function
     expect($user->fresh()->name)->toBe('Updated Name');
 });
 
-it('enables two-factor authentication and shows a QR code', function () {
+it('enables two-factor authentication and shows a QR code', function (): void {
     $this->actingAs(User::factory()->create());
 
     $page = visit('/profile');
@@ -41,7 +41,7 @@ it('enables two-factor authentication and shows a QR code', function () {
         ->assertNoJavaScriptErrors();
 });
 
-it('redirects guests from /profile to /login', function () {
+it('redirects guests from /profile to /login', function (): void {
     $page = visit('/profile');
 
     $page->assertPathIs('/login')

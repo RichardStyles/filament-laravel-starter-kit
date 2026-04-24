@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 use PragmaRX\Google2FA\Google2FA;
 
-it('starts in the "not enrolled" state', function () {
+it('starts in the "not enrolled" state', function (): void {
     $user = User::factory()->create();
 
     expect($user->two_factor_secret)->toBeNull()
         ->and($user->two_factor_confirmed_at)->toBeNull();
 });
 
-it('enables two-factor authentication but leaves it unconfirmed', function () {
+it('enables two-factor authentication but leaves it unconfirmed', function (): void {
     $user = User::factory()->create();
 
     Livewire::actingAs($user)
@@ -27,7 +27,7 @@ it('enables two-factor authentication but leaves it unconfirmed', function () {
         ->and($fresh->two_factor_confirmed_at)->toBeNull();
 });
 
-it('rejects an invalid confirmation code', function () {
+it('rejects an invalid confirmation code', function (): void {
     $user = User::factory()->create();
 
     Livewire::actingAs($user)
@@ -40,7 +40,7 @@ it('rejects an invalid confirmation code', function () {
     expect($user->fresh()->two_factor_confirmed_at)->toBeNull();
 });
 
-it('confirms two-factor authentication with a valid code', function () {
+it('confirms two-factor authentication with a valid code', function (): void {
     $user = User::factory()->create();
 
     $component = Livewire::actingAs($user)
@@ -57,7 +57,7 @@ it('confirms two-factor authentication with a valid code', function () {
     expect($user->fresh()->two_factor_confirmed_at)->not->toBeNull();
 });
 
-it('rejects recovery code regeneration when the password is wrong', function () {
+it('rejects recovery code regeneration when the password is wrong', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
 
     confirm2fa($user);
@@ -73,7 +73,7 @@ it('rejects recovery code regeneration when the password is wrong', function () 
     expect($user->fresh()->two_factor_recovery_codes)->toBe($original);
 });
 
-it('regenerates recovery codes with the correct password', function () {
+it('regenerates recovery codes with the correct password', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
 
     confirm2fa($user);
@@ -89,7 +89,7 @@ it('regenerates recovery codes with the correct password', function () {
     expect($user->fresh()->two_factor_recovery_codes)->not->toBe($original);
 });
 
-it('rejects disable when the password is wrong (post-confirmation state)', function () {
+it('rejects disable when the password is wrong (post-confirmation state)', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
 
     confirm2fa($user);
@@ -103,7 +103,7 @@ it('rejects disable when the password is wrong (post-confirmation state)', funct
     expect($user->fresh()->two_factor_confirmed_at)->not->toBeNull();
 });
 
-it('disables two-factor authentication with the correct password', function () {
+it('disables two-factor authentication with the correct password', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
 
     confirm2fa($user);
@@ -120,7 +120,7 @@ it('disables two-factor authentication with the correct password', function () {
         ->and($fresh->two_factor_confirmed_at)->toBeNull();
 });
 
-it('allows cancelling pending 2FA without a password', function () {
+it('allows cancelling pending 2FA without a password', function (): void {
     $user = User::factory()->create();
 
     Livewire::actingAs($user)

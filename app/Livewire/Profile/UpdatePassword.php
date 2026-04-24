@@ -59,7 +59,7 @@ class UpdatePassword extends Component implements HasSchemas
         } catch (ValidationException $e) {
             throw ValidationException::withMessages(
                 collect($e->errors())
-                    ->mapWithKeys(fn ($messages, $field) => ["data.$field" => $messages])
+                    ->mapWithKeys(fn ($messages, $field): array => ["data.$field" => $messages])
                     ->all()
             );
         }

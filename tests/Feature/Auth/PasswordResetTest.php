@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Livewire\Livewire;
 
-it('dispatches a reset-password notification to a known user', function () {
+it('dispatches a reset-password notification to a known user', function (): void {
     Notification::fake();
 
     $user = User::factory()->create(['email' => 'ada@example.com']);
@@ -24,7 +24,7 @@ it('dispatches a reset-password notification to a known user', function () {
     Notification::assertSentTo($user, ResetPassword::class);
 });
 
-it('does not dispatch a reset-password notification for unknown emails', function () {
+it('does not dispatch a reset-password notification for unknown emails', function (): void {
     Notification::fake();
 
     Livewire::test(ForgotPassword::class)
@@ -35,7 +35,7 @@ it('does not dispatch a reset-password notification for unknown emails', functio
     Notification::assertNothingSent();
 });
 
-it('throttles repeat reset-link requests via the password broker', function () {
+it('throttles repeat reset-link requests via the password broker', function (): void {
     $user = User::factory()->create(['email' => 'ada@example.com']);
 
     $component = Livewire::test(ForgotPassword::class)
@@ -45,7 +45,7 @@ it('throttles repeat reset-link requests via the password broker', function () {
     $component->call('sendResetLink')->assertHasErrors(['data.email']);
 });
 
-it('resets the password with a valid token and fires PasswordReset', function () {
+it('resets the password with a valid token and fires PasswordReset', function (): void {
     $user = User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('old-password'),
@@ -67,7 +67,7 @@ it('resets the password with a valid token and fires PasswordReset', function ()
     Event::assertDispatched(PasswordReset::class);
 });
 
-it('fails to reset with an invalid token', function () {
+it('fails to reset with an invalid token', function (): void {
     $user = User::factory()->create([
         'email' => 'ada@example.com',
         'password' => Hash::make('old-password'),

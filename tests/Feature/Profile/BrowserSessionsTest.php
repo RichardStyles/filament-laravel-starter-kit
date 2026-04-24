@@ -18,7 +18,7 @@ function seedSession(int $userId, string $id, int $lastActivity, ?string $ip = '
     ]);
 }
 
-it('lists only the current user sessions, ordered by last activity', function () {
+it('lists only the current user sessions, ordered by last activity', function (): void {
     $user = User::factory()->create();
     $other = User::factory()->create();
 
@@ -38,7 +38,7 @@ it('lists only the current user sessions, ordered by last activity', function ()
         ->and($sessions[1]->is_current_device)->toBeFalse();
 });
 
-it('rejects logging out other sessions with the wrong password', function () {
+it('rejects logging out other sessions with the wrong password', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
     seedSession($user->id, session()->getId(), now()->timestamp);
     seedSession($user->id, 'other-session', now()->subMinute()->timestamp);
@@ -52,7 +52,7 @@ it('rejects logging out other sessions with the wrong password', function () {
     expect(DB::table('sessions')->where('user_id', $user->id)->count())->toBe(2);
 });
 
-it('logs out other sessions when the password is correct', function () {
+it('logs out other sessions when the password is correct', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
     $currentId = session()->getId();
     seedSession($user->id, $currentId, now()->timestamp);

@@ -6,7 +6,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 
-it('registers a new user, fires Registered and logs them in', function () {
+it('registers a new user, fires Registered and logs them in', function (): void {
     Event::fake([Registered::class]);
 
     Livewire::test(Register::class)
@@ -23,7 +23,7 @@ it('registers a new user, fires Registered and logs them in', function () {
     Event::assertDispatched(Registered::class);
 });
 
-it('rejects a duplicate email', function () {
+it('rejects a duplicate email', function (): void {
     User::factory()->create(['email' => 'taken@example.com']);
 
     Livewire::test(Register::class)
@@ -37,7 +37,7 @@ it('rejects a duplicate email', function () {
     expect(User::where('email', 'taken@example.com')->count())->toBe(1);
 });
 
-it('requires matching password confirmation', function () {
+it('requires matching password confirmation', function (): void {
     Livewire::test(Register::class)
         ->set('data.name', 'Ada Lovelace')
         ->set('data.email', 'ada@example.com')

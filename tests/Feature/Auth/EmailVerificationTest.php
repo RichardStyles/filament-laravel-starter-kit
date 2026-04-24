@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Livewire\Livewire;
 
-it('redirects unverified users from /dashboard to /verify-email', function () {
+it('redirects unverified users from /dashboard to /verify-email', function (): void {
     $user = User::factory()->unverified()->create();
 
     $this->actingAs($user)
@@ -16,7 +16,7 @@ it('redirects unverified users from /dashboard to /verify-email', function () {
         ->assertRedirect(route('verification.notice'));
 });
 
-it('marks the user verified when hitting the signed URL and fires Verified', function () {
+it('marks the user verified when hitting the signed URL and fires Verified', function (): void {
     $user = User::factory()->unverified()->create();
 
     Event::fake([Verified::class]);
@@ -24,7 +24,7 @@ it('marks the user verified when hitting the signed URL and fires Verified', fun
     $signedUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addHour(),
-        ['id' => $user->id, 'hash' => sha1($user->email)],
+        ['id' => $user->id, 'hash' => sha1((string) $user->email)],
     );
 
     $this->actingAs($user)->get($signedUrl)->assertRedirect();
@@ -33,7 +33,7 @@ it('marks the user verified when hitting the signed URL and fires Verified', fun
     Event::assertDispatched(Verified::class);
 });
 
-it('returns 403 for a tampered hash', function () {
+it('returns 403 for a tampered hash', function (): void {
     $user = User::factory()->unverified()->create();
 
     $tamperedUrl = URL::temporarySignedRoute(
@@ -46,14 +46,14 @@ it('returns 403 for a tampered hash', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-it('returns 403 when one user hits another users verify URL (IDOR)', function () {
+it('returns 403 when one user hits another users verify URL (IDOR)', function (): void {
     $alice = User::factory()->unverified()->create(['email' => 'alice@example.com']);
     $bob = User::factory()->unverified()->create(['email' => 'bob@example.com']);
 
     $bobsSignedUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addHour(),
-        ['id' => $bob->id, 'hash' => sha1($bob->email)],
+        ['id' => $bob->id, 'hash' => sha1((string) $bob->email)],
     );
 
     $this->actingAs($alice)->get($bobsSignedUrl)->assertForbidden();
@@ -62,20 +62,20 @@ it('returns 403 when one user hits another users verify URL (IDOR)', function ()
     expect($alice->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-it('redirects guests to login for a valid signed verification URL', function () {
+it('redirects guests to login for a valid signed verification URL', function (): void {
     $user = User::factory()->unverified()->create();
 
     $signedUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addHour(),
-        ['id' => $user->id, 'hash' => sha1($user->email)],
+        ['id' => $user->id, 'hash' => sha1((string) $user->email)],
     );
 
     $this->get($signedUrl)->assertRedirect(route('login'));
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-it('resends the verification notification when requested', function () {
+it('resends the verification notification when requested', function (): void {
     Notification::fake();
 
     $user = User::factory()->unverified()->create();
@@ -87,7 +87,7 @@ it('resends the verification notification when requested', function () {
     Notification::assertSentTo($user, Illuminate\Auth\Notifications\VerifyEmail::class);
 });
 
-it('throttles verification-notification resends to 6 per minute', function () {
+it('throttles verification-notification resends to 6 per minute', function (): void {
     Notification::fake();
 
     $user = User::factory()->unverified()->create();

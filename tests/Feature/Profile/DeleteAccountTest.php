@@ -5,7 +5,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 
-it('rejects account deletion with the wrong password', function () {
+it('rejects account deletion with the wrong password', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
 
     Livewire::actingAs($user)
@@ -17,7 +17,7 @@ it('rejects account deletion with the wrong password', function () {
     expect(User::find($user->id))->not->toBeNull();
 });
 
-it('deletes the account with the correct password and redirects', function () {
+it('deletes the account with the correct password and redirects', function (): void {
     $user = User::factory()->create(['password' => Hash::make('correct')]);
 
     Livewire::actingAs($user)

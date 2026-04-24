@@ -80,7 +80,7 @@ class UpdateProfileInformation extends Component implements HasSchemas
     {
         return ValidationException::withMessages(
             collect($e->errors())
-                ->mapWithKeys(fn ($messages, $field) => ["data.$field" => $messages])
+                ->mapWithKeys(fn ($messages, $field): array => ["data.$field" => $messages])
                 ->all()
         );
     }
