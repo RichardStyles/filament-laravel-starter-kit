@@ -30,7 +30,7 @@ class ApiTokens extends Component implements HasSchemas
     {
         return $schema
             ->components([
-                TextInput::make('name')
+                TextInput::make('token_name')
                     ->label('Token name')
                     ->placeholder('e.g. CLI deploy script')
                     ->required()
@@ -43,7 +43,7 @@ class ApiTokens extends Component implements HasSchemas
     {
         $data = $this->form->getState();
 
-        $this->newPlainTextToken = Auth::user()->createToken($data['name'])->plainTextToken;
+        $this->newPlainTextToken = Auth::user()->createToken($data['token_name'])->plainTextToken;
 
         $this->form->fill();
 

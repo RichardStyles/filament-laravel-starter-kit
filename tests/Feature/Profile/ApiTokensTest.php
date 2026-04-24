@@ -11,7 +11,7 @@ it('issues a new token, exposes the plain text value once, and stores it on the 
 
     Livewire::actingAs($user)
         ->test(ApiTokens::class)
-        ->set('data.name', 'CLI deploy')
+        ->set('data.token_name', 'CLI deploy')
         ->call('createToken')
         ->assertHasNoErrors();
 
@@ -24,9 +24,9 @@ it('rejects empty token names', function (): void {
 
     Livewire::actingAs($user)
         ->test(ApiTokens::class)
-        ->set('data.name', '')
+        ->set('data.token_name', '')
         ->call('createToken')
-        ->assertHasErrors(['data.name']);
+        ->assertHasErrors(['data.token_name']);
 });
 
 it('revokes a token by id', function (): void {
