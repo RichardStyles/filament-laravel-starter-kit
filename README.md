@@ -1,58 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel 13 Starter Kit
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 13 starter kit with authentication, two-factor, role-based authorization, profile management, an admin panel, OAuth social sign-in, and a token-authenticated API — wired together with Livewire 4, Filament 5, Tailwind 4, and Pest 4.
 
-## About Laravel
+## What's included
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Area | What you get |
+| --- | --- |
+| Authentication | Login, registration, password reset, email verification, two-factor (TOTP), browser-session management, account deletion — all Livewire 4 components driven by Filament Schemas and Fortify |
+| Social sign-in | Socialite-backed GitHub + Google buttons on `/login` and `/register`, with a connected-accounts settings section |
+| Authorization | spatie/laravel-permission with seeded `admin` and `user` roles, an example `UserPolicy`, and a `before()` admin-bypass pattern |
+| Admin panel | Filament 5 panel at `/admin`, restricted to the `admin` role, with a `UserResource` for CRUD + role assignment |
+| API | Sanctum-protected `/api/v1/*` (with `/v1/user` example) plus a settings section to issue and revoke personal-access tokens |
+| Settings hub | Single `/settings` page with eight sections: profile + avatar upload, password, 2FA, appearance, API tokens, connected accounts, browser sessions, account deletion |
+| Theming | Light / dark / system appearance toggle persisted per user, with a pre-paint script in the layout to prevent FOUC |
+| Notifications | Filament's database notifications drawer wired through the navigation bell |
+| Mail | Laravel's mail templates published and recolored to the kit's indigo palette |
+| Tooling | Pint, Larastan (level 5), Rector (PHP 8.3 + quality sets), Pest 4 (with Playwright browser tests), GitHub Actions matrix on PHP 8.3/8.4 |
+| Quality | `composer check` runs lint, static analysis, refactor dry-run, and the full test suite as one command |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3+
+- Composer 2
+- Node 20+ and npm
+- A PostgreSQL or MySQL database
+- A Redis instance (optional — defaults to database queue and cache)
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Install
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer create-project richardstyles/filament-laravel-starter-kit my-app
+cd my-app
+composer setup
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+`composer setup` copies `.env.example` to `.env`, generates an app key, runs migrations, installs npm packages, and builds frontend assets.
 
-## Contributing
+If you cloned directly:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+npm install
+npm run build
+```
 
-## Code of Conduct
+The seeder creates a test admin (`test@example.com` / `password`) and five regular users.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Running locally
 
-## Security Vulnerabilities
+```bash
+composer dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+This launches `php artisan serve`, the queue worker, the log tailer, and the Vite dev server concurrently.
+
+## Quality commands
+
+```bash
+composer lint        # apply Pint formatting
+composer lint:test   # check Pint without applying changes (CI-safe)
+composer analyse     # run Larastan
+composer refactor    # apply Rector transforms
+composer refactor:dry # preview Rector changes
+composer test        # run the Pest suite
+composer check       # all of the above as one command
+```
+
+## OAuth setup
+
+Drop the credentials in `.env`:
+
+```bash
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_REDIRECT_URI="${APP_URL}/auth/github/callback"
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+```
+
+Toggle which providers appear via `SOCIALITE_PROVIDERS` (comma-separated). Add new providers by extending `config/services.php` and the `SocialController` whitelist.
+
+## Customizing
+
+| Want to... | Edit |
+| --- | --- |
+| Change the brand name | `APP_NAME` in `.env`, the logo `<img>` in `resources/views/livewire/navigation.blade.php` and `resources/views/welcome.blade.php` |
+| Change the brand color | `Color::Indigo` in `app/Providers/Filament/AdminPanelProvider.php`, indigo classes in views, `#4f46e5` in `resources/views/vendor/mail/html/themes/default.css` |
+| Add a navigation link | The `$links` array at the top of `resources/views/livewire/navigation.blade.php` |
+| Add a settings section | Create a Livewire component, add `@livewire(...)` to `resources/views/livewire/settings/index.blade.php` |
+| Add a Filament resource | `php artisan make:filament-resource Foo --generate` |
+| Disable email verification | `FORTIFY_EMAIL_VERIFICATION=false` in `.env` |
+| Add a locale | Drop `lang/{locale}/*.php` files mirroring `lang/en/`, set `APP_LOCALE` |
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Released under the MIT license. See [LICENSE](LICENSE).
