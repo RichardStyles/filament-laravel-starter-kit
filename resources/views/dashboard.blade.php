@@ -40,13 +40,13 @@
             <li class="flex items-start gap-3">
                 <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">1</span>
                 <span>
-                    Update your <a href="{{ route('profile') }}" class="font-medium text-indigo-600 underline hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">profile</a> — name, email, avatar, password, and two-factor authentication.
+                    Update your <a href="{{ route('settings') }}" class="font-medium text-indigo-600 underline hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">profile and security</a> — name, email, avatar, password, and two-factor authentication.
                 </span>
             </li>
             <li class="flex items-start gap-3">
                 <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">2</span>
                 <span>
-                    Pick an <a href="{{ route('profile') }}" class="font-medium text-indigo-600 underline hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">appearance preference</a> — system, light, or dark.
+                    Pick an <a href="{{ route('settings') }}" class="font-medium text-indigo-600 underline hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">appearance preference</a> — system, light, or dark.
                 </span>
             </li>
             <li class="flex items-start gap-3">

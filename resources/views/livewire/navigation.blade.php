@@ -67,7 +67,6 @@
                         aria-orientation="vertical"
                         class="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
                     >
-                        <a href="{{ route('profile') }}" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">Your profile</a>
                         <a href="{{ route('settings') }}" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">Settings</a>
                         <button type="button" wire:click="signOut" role="menuitem" class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">Sign out</button>
                     </div>
@@ -135,7 +134,6 @@
                 </button>
             </div>
             <div class="mt-3 space-y-1">
-                <a href="{{ route('profile') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200">Your profile</a>
                 <a href="{{ route('settings') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200">Settings</a>
                 <button type="button" wire:click="signOut" class="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200">Sign out</button>
             </div>

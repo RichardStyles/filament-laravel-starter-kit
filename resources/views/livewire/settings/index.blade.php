@@ -1,7 +1,7 @@
 <div class="mx-auto max-w-5xl">
     <div class="mb-8 space-y-2">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Your profile</h1>
-        <p class="text-sm text-gray-600 dark:text-gray-400">Manage your account details, security, and sessions.</p>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __('kit.settings.heading') }}</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('kit.settings.subheading') }}</p>
     </div>
 
     <div class="space-y-6">

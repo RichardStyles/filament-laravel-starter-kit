@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 
-it('renders the profile page with all six sections for a verified user', function (): void {
+it('renders the settings page with all six sections for a verified user', function (): void {
     $this->actingAs(User::factory()->create());
 
-    $page = visit('/profile');
+    $page = visit('/settings');
 
-    $page->assertSee('Your profile')
+    $page->assertSee('Settings')
         ->assertSee('Personal information')
         ->assertSee('Update password')
         ->assertSee('Two-factor authentication')
@@ -21,7 +23,7 @@ it('updates the signed-in user name via the personal information card', function
     $user = User::factory()->create(['name' => 'Original Name']);
     $this->actingAs($user);
 
-    $page = visit('/profile');
+    $page = visit('/settings');
 
     $page->fill('[wire\\:model="data.name"]', 'Updated Name')
         ->click('Save')
@@ -34,7 +36,7 @@ it('updates the signed-in user name via the personal information card', function
 it('enables two-factor authentication and shows a QR code', function (): void {
     $this->actingAs(User::factory()->create());
 
-    $page = visit('/profile');
+    $page = visit('/settings');
 
     $page->click('Enable')
         ->assertSee('Scan the QR code')
@@ -42,8 +44,17 @@ it('enables two-factor authentication and shows a QR code', function (): void {
         ->assertNoJavaScriptErrors();
 });
 
-it('redirects guests from /profile to /login', function (): void {
+it('redirects /profile to /settings for authenticated users', function (): void {
+    $this->actingAs(User::factory()->create());
+
     $page = visit('/profile');
+
+    $page->assertPathIs('/settings')
+        ->assertNoJavaScriptErrors();
+});
+
+it('redirects guests from /settings to /login', function (): void {
+    $page = visit('/settings');
 
     $page->assertPathIs('/login')
         ->assertNoJavaScriptErrors();

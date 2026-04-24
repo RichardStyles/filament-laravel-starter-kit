@@ -9,7 +9,7 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
-use App\Livewire\Profile\Profile;
+use App\Livewire\Settings\Settings;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +33,6 @@ Route::middleware('auth')->group(function (): void {
 
 Route::middleware(['auth', 'verified', 'auth.session'])->group(function (): void {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::get('/profile', Profile::class)->name('profile');
-    Route::view('/settings', 'settings')->name('settings');
+    Route::get('/settings', Settings::class)->name('settings');
+    Route::redirect('/profile', '/settings', 301)->name('profile');
 });

@@ -36,4 +36,9 @@ return [
             'unread_notifications' => 'Unread notifications',
         ],
     ],
+
+    'settings' => [
+        'heading' => 'Settings',
+        'subheading' => 'Manage your account details, security, and sessions.',
+    ],
 ];
