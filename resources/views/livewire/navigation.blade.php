@@ -4,13 +4,13 @@
 
     $links = [
         ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-        ['label' => 'Team', 'href' => '#', 'active' => false],
-        ['label' => 'Projects', 'href' => '#', 'active' => false],
-        ['label' => 'Calendar', 'href' => '#', 'active' => false],
     ];
 @endphp
 
-<nav class="border-b border-gray-200 bg-white dark:border-white/10 dark:bg-gray-800/50">
+<nav
+    x-data="{ mobileOpen: false, userOpen: false }"
+    class="border-b border-gray-200 bg-white dark:border-white/10 dark:bg-gray-800/50"
+>
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
             <div class="flex">
@@ -37,28 +37,56 @@
             <div class="hidden sm:ml-6 sm:flex sm:items-center">
                 @livewire('database-notifications')
 
-                <el-dropdown class="relative ml-3">
-                    <button class="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500">
+                <div
+                    class="relative ml-3"
+                    @click.outside="userOpen = false"
+                    @keydown.escape.window="userOpen = false"
+                >
+                    <button
+                        type="button"
+                        @click="userOpen = !userOpen"
+                        :aria-expanded="userOpen.toString()"
+                        aria-haspopup="true"
+                        class="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500"
+                    >
                         <span class="absolute -inset-1.5"></span>
                         <span class="sr-only">Open user menu</span>
                         <img src="{{ $avatarUrl }}" alt="{{ $user->name }}" class="size-8 rounded-full outline -outline-offset-1 outline-black/5 dark:outline-white/10" />
                     </button>
 
-                    <el-menu anchor="bottom end" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-                        <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-gray-700">Your profile</a>
-                        <a href="{{ route('settings') }}" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-gray-700">Settings</a>
-                        <button type="button" wire:click="signOut" class="block w-full px-4 py-2 text-left text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-gray-700">Sign out</button>
-                    </el-menu>
-                </el-dropdown>
+                    <div
+                        x-show="userOpen"
+                        x-cloak
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="transform opacity-0 scale-95"
+                        x-transition:enter-end="transform opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="transform opacity-100 scale-100"
+                        x-transition:leave-end="transform opacity-0 scale-95"
+                        role="menu"
+                        aria-orientation="vertical"
+                        class="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+                    >
+                        <a href="{{ route('profile') }}" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">Your profile</a>
+                        <a href="{{ route('settings') }}" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">Settings</a>
+                        <button type="button" wire:click="signOut" role="menuitem" class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">Sign out</button>
+                    </div>
+                </div>
             </div>
             <div class="-mr-2 flex items-center sm:hidden">
-                <button type="button" command="--toggle" commandfor="mobile-menu" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white dark:focus:outline-indigo-500">
+                <button
+                    type="button"
+                    @click="mobileOpen = !mobileOpen"
+                    :aria-expanded="mobileOpen.toString()"
+                    aria-controls="mobile-menu"
+                    class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white dark:focus:outline-indigo-500"
+                >
                     <span class="absolute -inset-0.5"></span>
                     <span class="sr-only">Open main menu</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 in-aria-expanded:hidden">
+                    <svg x-show="!mobileOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
                         <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 not-in-aria-expanded:hidden">
+                    <svg x-show="mobileOpen" x-cloak viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
                         <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
@@ -66,7 +94,7 @@
         </div>
     </div>
 
-    <el-disclosure id="mobile-menu" hidden class="block sm:hidden">
+    <div id="mobile-menu" x-show="mobileOpen" x-cloak class="block sm:hidden">
         <div class="space-y-1 pt-2 pb-3">
             @foreach ($links as $link)
                 <a
@@ -89,7 +117,11 @@
                     <div class="text-base font-medium text-gray-800 dark:text-white">{{ $user->name }}</div>
                     <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $user->email }}</div>
                 </div>
-                <button type="button" x-data="{}" x-on:click="$dispatch('open-modal', { id: 'database-notifications' })" class="relative ml-auto shrink-0 rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:text-gray-400 dark:hover:text-white dark:focus:outline-indigo-500">
+                <button
+                    type="button"
+                    @click="$dispatch('open-modal', { id: 'database-notifications' })"
+                    class="relative ml-auto shrink-0 rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:text-gray-400 dark:hover:text-white dark:focus:outline-indigo-500"
+                >
                     <span class="absolute -inset-1.5"></span>
                     <span class="sr-only">View notifications</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
@@ -108,5 +140,5 @@
                 <button type="button" wire:click="signOut" class="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200">Sign out</button>
             </div>
         </div>
-    </el-disclosure>
+    </div>
 </nav>
