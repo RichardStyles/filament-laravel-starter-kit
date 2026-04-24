@@ -1,0 +1,24 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+        - config
+        - database/factories
+        - database/seeders
+        - routes
+
+    level: 5
+
+    excludePaths:
+        - database/migrations/*
+
+    ignoreErrors:
+        # Filament Schemas adds the $form property via the InteractsWithSchemas trait.
+        - message: '#Access to an undefined property App\\Livewire\\.+::\$form\.#'
+          identifier: property.notFound
+        # Fortify ships defensive instanceof MustVerifyEmail checks; User implements it.
+        -
+            message: '#Instanceof between App\\Models\\User and Illuminate\\Contracts\\Auth\\MustVerifyEmail will always evaluate to true\.#'
+            path: app/Actions/Fortify/UpdateUserProfileInformation.php
