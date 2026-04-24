@@ -57,13 +57,14 @@ it('rejects login with bad credentials and surfaces a Filament form error', func
     $this->assertGuest();
 });
 
-it('logs the user out from the dashboard', function () {
+it('logs the user out from the dashboard via the profile dropdown', function () {
     $this->actingAs(User::factory()->create());
 
     $page = visit('/dashboard');
 
     $page->assertSee('Dashboard')
-        ->click('Log out')
+        ->click('Open user menu')
+        ->click('Sign out')
         ->assertPathIs('/')
         ->assertNoJavaScriptErrors();
 

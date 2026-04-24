@@ -1,1 +1,1 @@
-//
+import '@tailwindplus/elements';
