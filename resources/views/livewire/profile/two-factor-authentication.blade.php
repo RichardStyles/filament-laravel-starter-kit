@@ -5,7 +5,7 @@
     $isPending = $hasSecret && ! $isConfirmed;
 @endphp
 
-<x-profile.card
+<x-section-card
     title="Two-factor authentication"
     description="Add an extra layer of security using a time-based one-time password.">
 
@@ -87,4 +87,4 @@
             </form>
         </div>
     @endif
-</x-profile.card>
+</x-section-card>

@@ -1,4 +1,4 @@
-<x-profile.card
+<x-section-card
     title="Personal information"
     description="Update your name and email address.">
 
@@ -27,4 +27,4 @@
             </x-filament::button>
         </div>
     </form>
-</x-profile.card>
+</x-section-card>

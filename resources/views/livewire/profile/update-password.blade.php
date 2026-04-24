@@ -1,4 +1,4 @@
-<x-profile.card
+<x-section-card
     title="Update password"
     description="Choose a long, strong password to keep your account secure.">
 
@@ -16,4 +16,4 @@
             </x-filament::button>
         </div>
     </form>
-</x-profile.card>
+</x-section-card>

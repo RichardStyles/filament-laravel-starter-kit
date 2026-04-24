@@ -1,4 +1,4 @@
-<x-profile.card
+<x-section-card
     title="Browser sessions"
     description="Manage the browsers where you're currently signed in.">
 
@@ -47,4 +47,4 @@
             Log out other browser sessions
         </x-filament::button>
     @endif
-</x-profile.card>
+</x-section-card>

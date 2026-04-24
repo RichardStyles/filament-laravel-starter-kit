@@ -1,4 +1,4 @@
-<x-profile.card
+<x-section-card
     title="Delete account"
     description="Once your account is deleted, all of its resources and data will be permanently removed."
     danger>
@@ -26,4 +26,4 @@
             </div>
         </form>
     @endif
-</x-profile.card>
+</x-section-card>
