@@ -23,32 +23,28 @@
 
         <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <section class="py-20 text-center sm:py-28">
-                <p class="mb-4 text-sm font-semibold tracking-wide text-indigo-600 uppercase dark:text-indigo-400">Laravel starter kit</p>
+                <p class="mb-4 text-sm font-semibold tracking-wide text-indigo-600 uppercase dark:text-indigo-400">{{ __('kit.welcome.eyebrow') }}</p>
                 <h1 class="mx-auto max-w-3xl text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
-                    Ship your next Laravel app in an afternoon.
+                    {{ __('kit.welcome.headline') }}
                 </h1>
                 <p class="mx-auto mt-6 max-w-2xl text-balance text-lg text-gray-600 dark:text-gray-300">
-                    A batteries-included starter with authentication, two-factor, role-based authorization, profile management, and an admin panel — all wired together with Livewire 4, Filament 5, and Tailwind 4.
+                    {{ __('kit.welcome.subheadline') }}
                 </p>
                 <div class="mt-10 flex items-center justify-center gap-4">
                     @guest
-                        <a href="{{ route('register') }}" class="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">Create your account</a>
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-900 dark:text-white">Sign in <span aria-hidden="true">→</span></a>
+                        <a href="{{ route('register') }}" class="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">{{ __('kit.welcome.cta_register') }}</a>
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('kit.welcome.cta_sign_in') }} <span aria-hidden="true">→</span></a>
                     @else
-                        <a href="{{ route('dashboard') }}" class="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">Go to dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">{{ __('kit.welcome.cta_dashboard') }}</a>
                     @endguest
                 </div>
             </section>
 
             <section class="grid gap-6 pb-20 md:grid-cols-3">
-                @foreach ([
-                    ['title' => 'Authentication out of the box', 'body' => 'Login, registration, password reset, email verification, and two-factor TOTP — all wired through Fortify with Livewire forms.'],
-                    ['title' => 'Roles and policies', 'body' => 'Spatie permissions seeded with admin and user roles. A worked UserPolicy demonstrates the pattern.'],
-                    ['title' => 'Quality tooling', 'body' => 'Pint, Larastan, Rector, Pest 4, and a GitHub Actions matrix all configured. composer check runs the full pipeline.'],
-                ] as $feature)
+                @foreach (['auth', 'roles', 'tooling'] as $featureKey)
                     <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-800/50 dark:ring-white/10">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $feature['title'] }}</h3>
-                        <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">{{ $feature['body'] }}</p>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ __("kit.welcome.features.{$featureKey}.title") }}</h3>
+                        <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">{{ __("kit.welcome.features.{$featureKey}.body") }}</p>
                     </div>
                 @endforeach
             </section>
@@ -57,7 +53,7 @@
         <footer class="border-t border-gray-200 dark:border-white/10">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
                 <p class="text-xs text-gray-500 dark:text-gray-400">&copy; {{ now()->year }} {{ config('app.name') }}. All rights reserved.</p>
-                <a href="https://laravel.com" class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Built with Laravel</a>
+                <a href="https://laravel.com" class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('kit.welcome.footer_credit') }}</a>
             </div>
         </footer>
     </div>

@@ -1,8 +1,8 @@
 <x-layouts.authenticated :title="'Dashboard'">
     <x-slot:header>
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Dashboard</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __('kit.dashboard.heading') }}</h1>
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Welcome back, {{ auth()->user()->name }}.
+            {{ __('kit.dashboard.welcome_back', ['name' => auth()->user()->name]) }}
         </p>
     </x-slot:header>
 
@@ -15,9 +15,9 @@
         $unreadNotifications = $user->unreadNotifications()->count();
 
         $stats = [
-            ['label' => 'Account age', 'value' => $accountAge, 'meta' => 'since '.$user->created_at->toFormattedDateString()],
-            ['label' => 'Active sessions', 'value' => (string) $sessionCount, 'meta' => $sessionCount === 1 ? 'this device' : 'across your devices'],
-            ['label' => 'Unread notifications', 'value' => (string) $unreadNotifications, 'meta' => 'in the bell'],
+            ['label' => __('kit.dashboard.stats.account_age'), 'value' => $accountAge, 'meta' => 'since '.$user->created_at->toFormattedDateString()],
+            ['label' => __('kit.dashboard.stats.active_sessions'), 'value' => (string) $sessionCount, 'meta' => $sessionCount === 1 ? 'this device' : 'across your devices'],
+            ['label' => __('kit.dashboard.stats.unread_notifications'), 'value' => (string) $unreadNotifications, 'meta' => 'in the bell'],
         ];
     @endphp
 
