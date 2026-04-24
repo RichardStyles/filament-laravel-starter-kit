@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Profile;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
@@ -26,6 +27,7 @@ class UpdateProfileInformation extends Component implements HasSchemas
         $this->form->fill([
             'name' => $user->name,
             'email' => $user->email,
+            'avatar_path' => $user->avatar_path,
         ]);
     }
 
@@ -35,6 +37,16 @@ class UpdateProfileInformation extends Component implements HasSchemas
             ->columns(2)
             ->extraAttributes(['class' => 'gap-6'])
             ->components([
+                FileUpload::make('avatar_path')
+                    ->label('Avatar')
+                    ->avatar()
+                    ->image()
+                    ->imageEditor()
+                    ->disk('public')
+                    ->directory('avatars')
+                    ->visibility('public')
+                    ->maxSize(2048)
+                    ->columnSpanFull(),
                 TextInput::make('name')
                     ->label('Name')
                     ->required()
@@ -52,12 +64,16 @@ class UpdateProfileInformation extends Component implements HasSchemas
     {
         $data = $this->form->getState();
 
+        $avatarPath = $data['avatar_path'] ?? null;
+        unset($data['avatar_path']);
+
         try {
             $updater->update(Auth::user()->fresh(), $data);
         } catch (ValidationException $e) {
             throw $this->remapErrors($e);
         }
 
+        Auth::user()->forceFill(['avatar_path' => $avatarPath])->save();
         Auth::user()->refresh();
 
         Notification::make()

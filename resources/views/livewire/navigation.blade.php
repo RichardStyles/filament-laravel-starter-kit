@@ -1,6 +1,6 @@
 @php
     $user = auth()->user();
-    $avatarUrl = 'https://www.gravatar.com/avatar/'.md5(strtolower(trim($user->email ?? ''))).'?d=mp&s=256';
+    $avatarUrl = $user?->avatar_url;
 
     $links = [
         ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
