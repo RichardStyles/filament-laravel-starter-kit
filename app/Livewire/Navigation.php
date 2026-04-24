@@ -21,6 +21,8 @@ class Navigation extends Component
 
     public function render(): View
     {
-        return view('livewire.navigation');
+        return view('livewire.navigation', [
+            'unreadNotificationsCount' => Auth::user()?->unreadNotifications()->count() ?? 0,
+        ]);
     }
 }
