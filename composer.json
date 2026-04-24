@@ -63,6 +63,12 @@
         "analyse": "phpstan analyse --memory-limit=2G",
         "refactor": "rector process",
         "refactor:dry": "rector process --dry-run",
+        "check": [
+            "@lint:test",
+            "@analyse",
+            "@refactor:dry",
+            "@test"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
