@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-it('registers a new user and lands on the verify-email page', function (): void {
+it('registers a new user and lands on the email verification page', function (): void {
     $page = visit('/register');
 
     $page->assertSee('Create your account')
@@ -12,7 +12,7 @@ it('registers a new user and lands on the verify-email page', function (): void 
         ->fill('[wire\\:model="data.password"]', 'P@ssw0rd!secret')
         ->fill('[wire\\:model="data.password_confirmation"]', 'P@ssw0rd!secret')
         ->click('button[type="submit"]')
-        ->assertPathIs('/verify-email')
+        ->assertPathIs('/email/verify')
         ->assertSee('Verify your email')
         ->assertNoJavaScriptErrors();
 
