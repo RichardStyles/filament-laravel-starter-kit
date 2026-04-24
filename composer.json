@@ -1,10 +1,15 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "richardstyles/filament-laravel-starter-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "A Laravel 13 starter kit with Fortify, Livewire 4, Filament 5, Sanctum, Socialite, spatie/laravel-permission, Tailwind 4, and Pest 4 wired together.",
+    "keywords": ["laravel", "starter-kit", "filament", "livewire", "fortify", "tailwindcss"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Richard Styles"
+        }
+    ],
     "require": {
         "php": "^8.3 || ^8.4 || ^8.5",
         "filament/actions": "^5.0",
