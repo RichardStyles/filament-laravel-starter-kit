@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => '/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -143,10 +143,10 @@ return [
     |
     */
 
-    'features' => [
+    'features' => array_filter([
         Features::registration(),
         Features::resetPasswords(),
-        // Features::emailVerification(),
+        env('FORTIFY_EMAIL_VERIFICATION', true) ? Features::emailVerification() : null,
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
@@ -154,6 +154,6 @@ return [
             'confirmPassword' => true,
             // 'window' => 0,
         ]),
-    ],
+    ]),
 
 ];
