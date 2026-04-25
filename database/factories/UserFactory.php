@@ -36,6 +36,18 @@ class UserFactory extends Factory
     }
 
     /**
+     * Refresh the model from storage so every column populated by the database
+     * (defaults, columns added in later migrations) is loaded onto the in-memory
+     * instance — required when Model::preventAccessingMissingAttributes() is on.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (User $user): void {
+            $user->refresh();
+        });
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static
