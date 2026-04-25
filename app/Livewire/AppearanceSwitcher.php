@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Livewire\Profile\Appearance;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,8 @@ class AppearanceSwitcher extends Component
 
     public function mount(): void
     {
-        $this->preference = Auth::user()->appearance_preference ?? 'system';
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $this->preference = $user->appearance_preference ?? 'system';
     }
 
     public function setPreference(string $preference): void
@@ -28,7 +30,8 @@ class AppearanceSwitcher extends Component
 
         $this->preference = $preference;
 
-        Auth::user()->forceFill(['appearance_preference' => $preference])->save();
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $user->forceFill(['appearance_preference' => $preference])->save();
 
         $this->dispatch('appearance-updated', preference: $preference);
     }

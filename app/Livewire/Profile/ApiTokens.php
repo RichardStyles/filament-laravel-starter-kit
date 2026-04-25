@@ -9,6 +9,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -17,6 +18,7 @@ class ApiTokens extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array<string, mixed>|null */
     public ?array $data = [];
 
     public ?string $newPlainTextToken = null;
@@ -43,7 +45,8 @@ class ApiTokens extends Component implements HasSchemas
     {
         $data = $this->form->getState();
 
-        $this->newPlainTextToken = Auth::user()->createToken($data['token_name'])->plainTextToken;
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $this->newPlainTextToken = $user->createToken($data['token_name'])->plainTextToken;
 
         $this->form->fill();
 
@@ -55,7 +58,8 @@ class ApiTokens extends Component implements HasSchemas
 
     public function revoke(int $tokenId): void
     {
-        Auth::user()->tokens()->whereKey($tokenId)->delete();
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $user->tokens()->whereKey($tokenId)->delete();
 
         Notification::make()
             ->title('Token revoked.')
@@ -65,8 +69,10 @@ class ApiTokens extends Component implements HasSchemas
 
     public function render(): View
     {
+        $user = Auth::user() ?? throw new AuthenticationException;
+
         return view('livewire.profile.api-tokens', [
-            'tokens' => Auth::user()->tokens()->latest()->get(),
+            'tokens' => $user->tokens()->latest()->get(),
         ]);
     }
 }

@@ -8,6 +8,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -18,11 +19,12 @@ class UpdateProfileInformation extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array<string, mixed>|null */
     public ?array $data = [];
 
     public function mount(): void
     {
-        $user = Auth::user();
+        $user = Auth::user() ?? throw new AuthenticationException;
 
         $this->form->fill([
             'name' => $user->name,
@@ -66,14 +68,16 @@ class UpdateProfileInformation extends Component implements HasSchemas
         $avatarPath = $data['avatar_path'] ?? null;
         unset($data['avatar_path']);
 
+        $user = Auth::user() ?? throw new AuthenticationException;
+
         try {
-            $updater->update(Auth::user()->fresh(), $data);
+            $updater->update($user->fresh() ?? $user, $data);
         } catch (ValidationException $e) {
             throw $this->remapErrors($e);
         }
 
-        Auth::user()->forceFill(['avatar_path' => $avatarPath])->save();
-        Auth::user()->refresh();
+        $user->forceFill(['avatar_path' => $avatarPath])->save();
+        $user->refresh();
 
         Notification::make()
             ->title('Profile updated.')
@@ -83,7 +87,8 @@ class UpdateProfileInformation extends Component implements HasSchemas
 
     public function resendEmailVerification(): void
     {
-        Auth::user()->sendEmailVerificationNotification();
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $user->sendEmailVerificationNotification();
 
         Notification::make()
             ->title('Verification link sent.')

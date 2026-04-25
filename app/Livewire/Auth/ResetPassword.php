@@ -27,6 +27,7 @@ class ResetPassword extends Component implements HasSchemas
 
     public string $token = '';
 
+    /** @var array<string, mixed>|null */
     public ?array $data = [];
 
     public function mount(string $token): void
@@ -91,7 +92,7 @@ class ResetPassword extends Component implements HasSchemas
 
         if ($status !== Password::PASSWORD_RESET) {
             throw ValidationException::withMessages([
-                'data.email' => [__($status)],
+                'data.email' => [__(is_string($status) ? $status : 'passwords.failed')],
             ]);
         }
 

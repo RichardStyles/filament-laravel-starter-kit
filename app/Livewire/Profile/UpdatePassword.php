@@ -7,6 +7,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,7 @@ class UpdatePassword extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array<string, mixed>|null */
     public ?array $data = [];
 
     public function mount(): void
@@ -53,9 +55,10 @@ class UpdatePassword extends Component implements HasSchemas
     public function updatePassword(UpdatesUserPasswords $updater): void
     {
         $data = $this->form->getState();
+        $user = Auth::user() ?? throw new AuthenticationException;
 
         try {
-            $updater->update(Auth::user(), $data);
+            $updater->update($user, $data);
         } catch (ValidationException $e) {
             throw ValidationException::withMessages(
                 collect($e->errors())

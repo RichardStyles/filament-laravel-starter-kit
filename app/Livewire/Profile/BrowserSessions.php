@@ -21,6 +21,7 @@ class BrowserSessions extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array{password?: string|null}|null */
     public ?array $data = [];
 
     public bool $confirmingLogout = false;
@@ -44,6 +45,9 @@ class BrowserSessions extends Component implements HasSchemas
             ->statePath('data');
     }
 
+    /**
+     * @return Collection<int, object{id: string, ip_address: string|null, is_current_device: bool, last_active: string, agent: array{browser: string, platform: string}}&\stdClass>
+     */
     #[Computed]
     public function sessions(): Collection
     {
@@ -51,19 +55,26 @@ class BrowserSessions extends Component implements HasSchemas
             ->where('user_id', Auth::id())
             ->orderByDesc('last_activity')
             ->get()
-            ->map(fn ($row) => (object) [
-                'id' => $row->id,
-                'ip_address' => $row->ip_address,
-                'is_current_device' => $row->id === session()->getId(),
-                'last_active' => Carbon::createFromTimestamp($row->last_activity)->diffForHumans(),
-                'agent' => $this->parseAgent($row->user_agent),
-            ])
+            ->map(function (object $row): object {
+                $id = is_string($row->id) ? $row->id : '';
+                $ipAddress = is_string($row->ip_address) ? $row->ip_address : null;
+                $userAgent = is_string($row->user_agent) ? $row->user_agent : null;
+                $lastActivity = is_int($row->last_activity) ? $row->last_activity : 0;
+
+                return (object) [
+                    'id' => $id,
+                    'ip_address' => $ipAddress,
+                    'is_current_device' => $id === session()->getId(),
+                    'last_active' => Carbon::createFromTimestamp($lastActivity)->diffForHumans(),
+                    'agent' => $this->parseAgent($userAgent),
+                ];
+            })
             ->values();
     }
 
     public function logoutOtherBrowserSessions(LogoutOtherBrowserSessions $action): void
     {
-        $password = (string) ($this->data['password'] ?? '');
+        $password = $this->data['password'] ?? '';
 
         try {
             $action->logout($password);
@@ -83,6 +94,9 @@ class BrowserSessions extends Component implements HasSchemas
             ->send();
     }
 
+    /**
+     * @return array{browser: string, platform: string}
+     */
     private function parseAgent(?string $ua): array
     {
         if (! $ua) {

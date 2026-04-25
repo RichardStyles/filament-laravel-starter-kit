@@ -57,6 +57,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     /**
      * Resolved avatar URL — uploaded avatar if present, Gravatar otherwise.
+     *
+     * @return Attribute<string, never>
      */
     protected function avatarUrl(): Attribute
     {

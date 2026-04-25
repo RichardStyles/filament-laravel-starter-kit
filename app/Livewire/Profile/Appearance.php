@@ -9,6 +9,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -19,6 +20,7 @@ class Appearance extends Component implements HasSchemas
 
     public const array PREFERENCES = ['system', 'light', 'dark'];
 
+    /** @var array<string, mixed>|null */
     public ?array $data = [];
 
     public function mount(): void
@@ -54,7 +56,8 @@ class Appearance extends Component implements HasSchemas
     {
         $data = $this->form->getState();
 
-        Auth::user()->forceFill(['appearance_preference' => $data['appearance_preference']])->save();
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $user->forceFill(['appearance_preference' => $data['appearance_preference']])->save();
 
         $this->dispatch('appearance-updated', preference: $data['appearance_preference']);
 

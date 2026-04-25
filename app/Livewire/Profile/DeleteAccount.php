@@ -7,6 +7,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -16,6 +17,7 @@ class DeleteAccount extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array{password?: string|null}|null */
     public ?array $data = [];
 
     public bool $confirmingDeletion = false;
@@ -46,10 +48,11 @@ class DeleteAccount extends Component implements HasSchemas
 
     public function deleteAccount(DeleteUserAccount $action): void
     {
-        $password = (string) ($this->data['password'] ?? '');
+        $password = $this->data['password'] ?? '';
+        $user = Auth::user() ?? throw new AuthenticationException;
 
         try {
-            $action->delete(Auth::user(), $password);
+            $action->delete($user, $password);
         } catch (ValidationException $e) {
             throw ValidationException::withMessages([
                 'data.password' => $e->errors()['password'] ?? [__('The provided password is invalid.')],

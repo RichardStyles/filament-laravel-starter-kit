@@ -9,7 +9,7 @@ parameters:
         - database/seeders
         - routes
 
-    level: 5
+    level: 9
 
     excludePaths:
         - database/migrations/*

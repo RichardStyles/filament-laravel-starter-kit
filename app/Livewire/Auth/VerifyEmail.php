@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use Filament\Notifications\Notification;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -24,8 +25,8 @@ class VerifyEmail extends Component
 
     public function resend(): void
     {
-        $user = Auth::user();
-        $throttleKey = 'verify-email-resend|'.$user->getKey();
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $throttleKey = 'verify-email-resend|'.$user->id;
 
         if (RateLimiter::tooManyAttempts($throttleKey, 6)) {
             Notification::make()

@@ -22,6 +22,7 @@ class Register extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array<string, mixed>|null */
     public ?array $data = [];
 
     public function mount(): void

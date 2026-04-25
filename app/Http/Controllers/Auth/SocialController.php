@@ -20,14 +20,14 @@ class SocialController extends Controller
 {
     public function redirect(string $provider): SymfonyRedirectResponse
     {
-        abort_unless(in_array($provider, config('services.socialite.providers'), true), 404);
+        abort_unless(in_array($provider, (array) config('services.socialite.providers'), true), 404);
 
         return Socialite::driver($provider)->redirect();
     }
 
     public function callback(string $provider): RedirectResponse
     {
-        abort_unless(in_array($provider, config('services.socialite.providers'), true), 404);
+        abort_unless(in_array($provider, (array) config('services.socialite.providers'), true), 404);
 
         $oauthUser = Socialite::driver($provider)->user();
 

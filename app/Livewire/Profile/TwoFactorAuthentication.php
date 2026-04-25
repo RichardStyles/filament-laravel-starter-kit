@@ -7,6 +7,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,7 @@ class TwoFactorAuthentication extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
 
+    /** @var array{code?: string|null, password?: string|null}|null */
     public ?array $data = [];
 
     public bool $showingRecoveryCodes = false;
@@ -62,10 +64,11 @@ class TwoFactorAuthentication extends Component implements HasSchemas
 
     public function confirmTwoFactorAuthentication(ConfirmTwoFactorAuthentication $confirm): void
     {
-        $code = (string) ($this->data['code'] ?? '');
+        $code = $this->data['code'] ?? '';
+        $user = Auth::user() ?? throw new AuthenticationException;
 
         try {
-            $confirm(Auth::user()->fresh(), $code);
+            $confirm($user->fresh(), $code);
         } catch (ValidationException $e) {
             throw ValidationException::withMessages([
                 'data.code' => $e->errors()['code'] ?? [__('The provided two factor authentication code was invalid.')],
@@ -85,7 +88,8 @@ class TwoFactorAuthentication extends Component implements HasSchemas
     {
         $this->ensurePasswordMatches();
 
-        $generate(Auth::user()->fresh());
+        $user = Auth::user() ?? throw new AuthenticationException;
+        $generate($user->fresh());
 
         $this->showingRecoveryCodes = true;
         $this->data['password'] = null;
@@ -98,7 +102,8 @@ class TwoFactorAuthentication extends Component implements HasSchemas
 
     public function disableTwoFactorAuthentication(DisableTwoFactorAuthentication $disable): void
     {
-        $user = Auth::user()->fresh();
+        $current = Auth::user() ?? throw new AuthenticationException;
+        $user = $current->fresh() ?? throw new AuthenticationException;
 
         $isPendingConfirmation = $user->two_factor_secret !== null
             && $user->two_factor_confirmed_at === null;
@@ -122,9 +127,10 @@ class TwoFactorAuthentication extends Component implements HasSchemas
 
     private function ensurePasswordMatches(): void
     {
-        $password = (string) ($this->data['password'] ?? '');
+        $password = $this->data['password'] ?? '';
+        $user = Auth::user() ?? throw new AuthenticationException;
 
-        if (! Hash::check($password, Auth::user()->password)) {
+        if (! Hash::check($password, $user->password)) {
             throw ValidationException::withMessages([
                 'data.password' => [__('The provided password does not match your current password.')],
             ]);
